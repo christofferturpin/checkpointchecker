@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Active TN Police Checkpoints</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <style>
+    /* kill all default box-sizing */
+    * {
+      box-sizing: border-box;
+    }
+    
+    /* full height body with flex column */
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+      overflow: hidden;
+    }
+    
+    /* top banner */
+    .info-banner {
+      flex: 0 0 auto;
+      font-size: 1.2vw;
+      text-align: center;
+      background-color: #222;
+      color: #ccc;
+      padding: 0.5vw;
+    }
+    
+    /* main layout: left ad, center container, right ad */
+    .layout {
+      flex: 1 1 auto;
+      display: flex;
+      overflow: hidden;
+    }
+    
+    /* ad space */
+    .ads img {
+      /* don’t allow the image to exceed the ad’s container */
+      max-width: 100%;
+      max-height: 100%;
+      height: auto;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+    
+    /* center container with vertical stacking */
+    .container {
+      flex: 1 1 auto;
+      padding: 1vw;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    /* headings */
+    h1, h2 {
+      flex: 0 0 auto;
+      text-align: center;
+      margin: 0.5vw 0;
+      font-size: 3vw;
+    }
+    
+    /* scrolling table wrappers */
+    .table-wrapper {
+      overflow: auto;
+      margin: 1vw 0;
+    }
+    
+    /* top table gets more flex space */
+    #today-wrapper {
+      flex: 2 1 0;
+    }
+    
+    /* bottom table gets less space */
+    #upcoming-wrapper {
+      flex: 1 1 0;
+    }
+    
+    /* simple table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.8vw;
+    }
+    
+    th, td {
+      border: 1px solid #fff;
+      padding: 0.8vw;
+      text-align: center;
+    }
+    
+    th {
+      background-color: #444;
+      font-size: 1.9vw;
+    }
+    
+    /* smaller table styling */
+    .small-table {
+      width: 90%;
+      margin: 0 auto;
+      color: #aaa;
+      font-size: 1.4vw;
+      font-family: "courier new", courier, monospace;
+    }
+    
+    /* footer styling */
+    .footer {
+      flex: 0 0 auto;
+      text-align: center;
+      background-color: #000;
+      padding: 0.5vw 0;
+      font-size: 1vw;
+    }
+    
+    /* Mobile styles: when screen width is 600px or less */
+    @media only screen and (max-width: 600px) {
+      .layout {
+        flex-direction: column;
+      }
+      /* optionally hide ads or reposition them */
+      .ads {
+        display: none;
+      }
+      .info-banner {
+        font-size: 4vw;
+        padding: 2vw;
+      }
+      .container {
+        padding: 3vw;
+      }
+      h1, h2 {
+        font-size: 6vw;
+        margin: 2vw 0;
+      }
+      .table-wrapper {
+        margin: 2vw 0;
+      }
+      table {
+        font-size: 4vw;
+      }
+      th, td {
+        padding: 2vw;
+      }
+      th {
+        font-size: 4.5vw;
+      }
+      .footer {
+        font-size: 3vw;
+        padding: 2vw 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- top banner -->
+  <div class="info-banner">
+    Optimized for TV displays in bars and restaurants, keeping patrons informed and safe.
+  </div>
+  
+  <!-- main area: ads and container -->
+  <div class="layout">
+    <div class="ads"><img src="https://d1v0y2qyzpnh0x.cloudfront.net/lawyer.png" alt="Ad"></div>
+    
+    <div class="container">
+      <h1>Active Tennessee Police Checkpoints for <span id="today-date"></span></h1>
+      
+      <!-- top table: today's checkpoints -->
+      <div class="table-wrapper" id="today-wrapper">
+        <table id="checkpoints-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>County</th>
+              <th>Location</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="4" style="text-align: center;">No checkpoints found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <h2>Upcoming Checkpoints</h2>
+      
+      <!-- bottom table: upcoming checkpoints -->
+      <div class="table-wrapper" id="upcoming-wrapper">
+        <table id="upcoming-checkpoints-table" class="small-table">
+          <thead>
+            <tr>
+              <th>date</th>
+              <th>county</th>
+              <th>location</th>
+              <th>type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="4" style="text-align: center;">No checkpoints found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- footer -->
+      <div class="footer">
+        <p>This website firmly opposes drunk driving, while also advocating that law abiding citizens should not be unnecessarily harassed by law enforcement.</p>
+        <p style="font-size: 1vh">Need a web/cloud dev? https://christofferturpin.com</p>
+        <p style="font-size: 1vh">Get the full list @ https://www.tn.gov/safety/tnhp/checkpoints.html</p>
+      </div>
+    </div>
+    
+    <div class="ads"><img src="https://d1v0y2qyzpnh0x.cloudfront.net/bar.png" alt="Ad"></div>
+  </div>
+  
+  <script>
+    // Fetch a PDF and parse it
+    async function fetchPDF() {
+      const now = new Date();
+      const month = now.toLocaleString('default', { month: 'long' }).toUpperCase();
+      const today = now.toLocaleDateString('en-US');
+      document.getElementById("today-date").textContent = today;
+      
+      // Using CloudFront URL
+      const pdfUrl = `https://d24d7bv4yv5cjx.cloudfront.net/checkpoints_${month}.pdf`;
+      try {
+        const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+        let extractedText = "";
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          extractedText += textContent.items.map(item => item.str).join(" ") + "\n";
+        }
+        const checkpoints = extractCheckpoints(extractedText);
+        const todayCheckpoints = filterByToday(checkpoints, today);
+        const upcomingCheckpoints = filterUpcoming(checkpoints, now);
+        displayCheckpoints(todayCheckpoints, "checkpoints-table");
+        displayCheckpoints(upcomingCheckpoints, "upcoming-checkpoints-table");
+      } catch (error) {
+        console.error("error fetching or parsing pdf:", error);
+        document.querySelector("#checkpoints-table tbody").innerHTML =
+          `<tr><td colspan="4" style="text-align: center; color: red;">failed to load data.</td></tr>`;
+      }
+    }
+    
+    // Extract checkpoint data using regex
+    function extractCheckpoints(text) {
+      const pattern = /(\d{1,2}\/\d{1,2}\/\d{4})\s+([a-za-z\s]+?)\s+(.+?)\s+(sobriety|seat belt|dl)/gi;
+      let matches, data = [];
+      while ((matches = pattern.exec(text)) !== null) {
+        data.push({
+          date: matches[1].trim(),
+          county: matches[2].trim(),
+          location: matches[3].trim(),
+          type: matches[4].trim()
+        });
+      }
+      return data;
+    }
+    
+    // Filter checkpoints matching today's date
+    function filterByToday(checkpoints, today) {
+      return checkpoints.filter(row => row.date === today);
+    }
+    
+    // Filter upcoming checkpoints (within the next 7 days)
+    function filterUpcoming(checkpoints, now) {
+      const upcomingCheckpoints = [];
+      const todayTimestamp = now.getTime();
+      checkpoints.forEach(({ date, county, location, type }) => {
+        const [m, d, y] = date.split('/').map(num => parseInt(num, 10));
+        const checkpointDate = new Date(y, m - 1, d);
+        const diffDays = (checkpointDate.getTime() - todayTimestamp) / (1000 * 60 * 60 * 24);
+        if (diffDays > 0 && diffDays <= 7) {
+          upcomingCheckpoints.push({ date, county, location, type });
+        }
+      });
+      return upcomingCheckpoints;
+    }
+    
+    // Display checkpoints in the appropriate table
+    function displayCheckpoints(checkpoints, tableId) {
+      checkpoints.sort((a, b) => a.county.localeCompare(b.county));
+      const tableBody = document.querySelector(`#${tableId} tbody`);
+      tableBody.innerHTML = "";
+      if (checkpoints.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center;">No Scheduled Checkpoints.</td></tr>`;
+        return;
+      }
+      checkpoints.forEach(({ date, county, location, type }) => {
+        const row = `<tr>
+          <td>${date}</td>
+          <td>${county}</td>
+          <td>${location}</td>
+          <td>${type}</td>
+        </tr>`;
+        tableBody.innerHTML += row;
+      });
+    }
+    
+    // Auto-scroll each table
+    function autoScroll(element, step = 1, delay = 50) {
+      setInterval(() => {
+        element.scrollTop += step;
+        if (element.scrollTop >= element.scrollHeight - element.clientHeight) {
+          element.scrollTop = 0;
+        }
+      }, delay);
+    }
+    
+    // Fetch PDF and start auto-scroll after data is loaded
+    fetchPDF().then(() => {
+      const todayWrapper = document.getElementById("today-wrapper");
+      const upcomingWrapper = document.getElementById("upcoming-wrapper");
+      autoScroll(todayWrapper, 1, 50);
+      autoScroll(upcomingWrapper, 1, 50);
+    });
+  </script>
+</body>
+</html>
